@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+		<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			
+			<table class="table table-striped table-bordered table-hover">
+				<tbody id ="tb">
+					
+				</tbody>
+
+			</table>
+
+			<br>
+			<hr>
+
+		</div>
+		
+		<div id="">
+			<ul>
+				<li>
+				  <a href="#" >
+				    <span onclick="previouspage()">上一页</span>
+				  </a>
+				</li>
+				<li onclick="search(this)" class="btn btn-default" id="1"><a href="#">1</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="2"><a href="#">2</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="3"><a href="#">3</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="4"><a href="#">4</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="5"><a href="#">5</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="6"><a href="#">6</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="7"><a href="#">7</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="8"><a href="#">8</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="9"><a href="#">9</a></li>
+				<li onclick="search(this)" class="btn btn-default" id="10"><a href="#">10</a></li>
+				<li>
+				  <a href="#" >
+				    <span onclick="nextpage()">下一页</span>
+				  </a>
+				</li>
+			</ul>
+			
+			
+		</div>
+		
+		
+		<script type="text/javascript">
+			
+			var page = 1;
+			
+			document.onreadystatechange = function () {
+			                 if(document.readyState=="complete") {  
+								 var obj=document.getElementById(page);
+			                      search(obj);
+			                  }   
+			            } 
+						  
+			function previouspage(){
+				if(page>1){
+					page--;
+					var obj=document.getElementById(page++);
+					search(obj);
+				}else{
+					alert("已到第一页")
+				}
+				
+			}
+			function nextpage(){
+				if(page<10){
+					page++;
+					var obj=document.getElementById(page--);
+					search(obj);
+				}else{
+					alert("已到最后一页")
+				}
+				
+			}  
+			
+			
+			
+			function search(obj){
+				document.getElementById(page).childNodes[0].setAttribute("class","");
+				obj.childNodes[0].setAttribute("class","acti");
+				
+				page=obj.id;
+						
+				$.ajax({
+					//图片
+					url:"https://api.apiopen.top/getImages",
+					type:"POST",
+					data:"page="+page+"&count=20",	
+					success:function(data){
+						var result = data.result;
+						var tb = $("#tb");//jqery查找元素标签的方式
+						tb.html("");
+						for(var index=0;index<result.length;index=index+4){
+							var str="<tr><td><a href='"+result[index].img+"' target='_blank'><img src='"+result[index].img+"'/></a></td>"+
+							"<td><a href='"+result[index+1].img+"' target='_blank'><img src='"+result[index+1].img+"'/></a></td>"+
+							"<td><a href='"+result[index+2].img+"' target='_blank'><img src='"+result[index+2].img+"'/></a></td>"+
+							"<td><a href='"+result[index+3].img+"' target='_blank'><img src='"+result[index+3].img+"'/></a></td></tr>"
+						
+							
+							tb.append(str); //将字符串页面添加到指定的标签中
+							}
+					}
+				
+				});
+					
+			}
+			
+		</script>
+		
+		
+	</body>
+</html>
